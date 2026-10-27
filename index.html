@@ -120,7 +120,9 @@
   const API_URL = 'https://script.google.com/macros/s/AKfycbwC48asHSv6KA-jmMSB3RV_ctOZc-3SrycQF7AVKO7WNEHNUB66Zf0vBwC_CTQUfbdnYg/exec';
 
 const tg = window.Telegram?.WebApp;
-const initData = tg?.initData || '';
+console.log('Telegram WebApp tersedia:', !!tg);
+console.log('initData tersedia:', !!(tg?.initData));
+console.log('Panjang initData:', tg?.initData?.length || 0);
 
 if (tg) {
   tg.ready();
@@ -143,12 +145,82 @@ if (tg) {
       if (el) el.disabled = value || !state || !state.activeSession;
     });
   }
-  function callServer(fn, args, onSuccess, onError) {
-    const fail = message => {
+
+function callServer(fn, args, onSuccess, onError) {
+  const fail = message => {
+    setBusy(false);
+    showMessage(
+      message || 'Terjadi kesalahan. Coba lagi.',
+      'error'
+    );
+    if (onError) onError(message);
+  };
+
+  const tg = window.Telegram?.WebApp;
+  const initData = tg?.initData || '';
+
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  if (!initData) {
+    fail(
+      'Data autentikasi Telegram tidak tersedia. ' +
+      'Buka aplikasi melalui tombol Web App di bot Telegram.'
+    );
+    return;
+  }
+
+  if (!API_URL || !API_URL.endsWith('/exec')) {
+    fail('API_URL belum diatur dengan URL Web App Apps Script yang benar.');
+    return;
+  }
+
+  const requestArgs = Array.isArray(args) ? [...args] : [];
+
+  // Semua aksi backend menerima initData sebagai argumen pertama.
+  requestArgs[0] = initData;
+
+  fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    },
+    body: JSON.stringify({
+      action: fn,
+      args: requestArgs
+    })
+  })
+    .then(async response => {
+      const text = await response.text();
+      let json;
+
+      try {
+        json = JSON.parse(text);
+      } catch (err) {
+        throw new Error(
+          'Respons Apps Script bukan JSON. Periksa URL dan deployment.'
+        );
+      }
+
+      if (!response.ok || json.ok !== true) {
+        throw new Error(
+          json.error || 'Permintaan ke server gagal.'
+        );
+      }
+
+      return json.data;
+    })
+    .then(data => {
       setBusy(false);
-      showMessage(message || 'Terjadi kesalahan. Coba lagi.', 'error');
-      if (onError) onError(message);
-    };
+      if (onSuccess) onSuccess(data);
+    })
+    .catch(err => {
+      fail(err.message || 'Gagal menghubungi server.');
+    });
+}
+
 
     if (API_URL && API_URL.indexOf('https://script.google.com/macros/s/AKfycbwC48asHSv6KA-jmMSB3RV_ctOZc-3SrycQF7AVKO7WNEHNUB66Zf0vBwC_CTQUfbdnYg/exec') === 0) {
       fail('Konfigurasi belum selesai: ganti API_URL dengan URL Web App Apps Script yang berakhiran /exec.');
