@@ -2,411 +2,320 @@
 <html lang="id">
 <head>
   <base target="_top">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <style>
     :root {
       --bg: var(--tg-theme-bg-color, #f3f6fb);
-      --card: var(--tg-theme-secondary-bg-color, #ffffff);
-      --text: var(--tg-theme-text-color, #172033);
-      --muted: var(--tg-theme-hint-color, #6b7280);
-      --primary: var(--tg-theme-button-color, #2675d8);
-      --primaryText: var(--tg-theme-button-text-color, #ffffff);
-      --line: rgba(120,130,150,.22);
-      --good: #138a55;
-      --bad: #c0392b;
+      --text: var(--tg-theme-text-color, #172337);
+      --muted: var(--tg-theme-hint-color, #738096);
+      --card: var(--tg-theme-secondary-bg-color, #fff);
+      --primary: var(--tg-theme-button-color, #1677d2);
+      --button-text: var(--tg-theme-button-text-color, #fff);
+      --line: #e3e8f0;
     }
+
     * { box-sizing: border-box; }
-    body { margin: 0; padding: 16px 14px calc(24px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, sans-serif; }
-    .wrap { max-width: 760px; margin: 0 auto; }
-    .hero { padding: 22px; border-radius: 22px; color: white; background: linear-gradient(135deg,#1456a0,#3189e8); box-shadow: 0 10px 28px rgba(28,94,165,.18); }
-    .eyebrow { opacity: .8; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
-    h1 { margin: 5px 0 8px; font-size: 25px; line-height: 1.15; }
-    .hero p { margin: 0; opacity: .9; }
-    .pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 99px; padding: 5px 10px; font-size: 12px; background: rgba(255,255,255,.17); margin-top: 14px; }
-    .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 17px; margin-top: 14px; }
-    .row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+
+    body {
+      margin: 0;
+      padding: 18px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    .app { max-width: 620px; margin: auto; }
+
+    .hero {
+      background: linear-gradient(135deg, #1769aa, #42a4dc);
+      padding: 24px;
+      border-radius: 22px;
+      color: white;
+    }
+
+    .hero h1 { margin: 8px 0; font-size: 26px; }
+    .hero p { line-height: 1.5; }
+
+    .card {
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--card);
+      box-shadow: 0 5px 20px #14213d0a;
+    }
+
     .muted { color: var(--muted); font-size: 13px; }
-    .name { font-size: 18px; font-weight: 750; margin: 3px 0; overflow-wrap:anywhere; }
-    .section-title { font-size: 16px; font-weight: 750; margin: 0 0 12px; }
-    .btn { display:block; width:100%; border:0; border-radius:13px; padding:13px 15px; background:var(--primary); color:var(--primaryText); font-size:15px; font-weight:700; cursor:pointer; margin-top:10px; }
-    .btn:disabled { opacity:.45; cursor:not-allowed; }
-    .btn.secondary { color:var(--text); background:transparent; border:1px solid var(--line); }
-    input { width:100%; padding:13px; border:1px solid var(--line); border-radius:12px; background:var(--bg); color:var(--text); font:inherit; }
-    .stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
-    .stat { padding:12px 9px; border-radius:13px; background:var(--bg); border:1px solid var(--line); }
-    .stat strong { display:block; font-size:21px; }
-    .stat span { color:var(--muted); font-size:11px; }
-    .notice { padding:12px 13px; border-radius:12px; margin-top:12px; background:var(--bg); border:1px solid var(--line); font-size:13px; }
-    .notice.error { color:var(--bad); border-color:rgba(192,57,43,.3); }
-    .notice.success { color:var(--good); border-color:rgba(19,138,85,.3); }
-    .record { padding:12px 0; border-bottom:1px solid var(--line); }
-    .record:last-child { border-bottom:0; padding-bottom:0; }
-    .tag { display:inline-block; padding:3px 8px; border-radius:99px; background:var(--bg); font-size:11px; border:1px solid var(--line); }
-    .hidden { display:none !important; }
-    .loading { text-align:center; padding:28px 10px; color:var(--muted); }
-    .small { font-size:12px; }
-    footer { text-align:center; color:var(--muted); font-size:11px; padding:20px 8px 0; }
-    @media(min-width:600px) { body { padding:24px; } .grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start; } .grid .card { margin-top:14px; } }
+    .value { font-size: 19px; font-weight: bold; }
+
+    input, textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text);
+      font: inherit;
+      margin-top: 8px;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 10px;
+      background: var(--primary);
+      color: var(--button-text);
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    button:disabled { opacity: .5; cursor: not-allowed; }
+
+    .record {
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .record:last-child { border-bottom: 0; }
+    .status { font-weight: bold; font-size: 13px; }
+    .notice { margin-top: 12px; font-size: 13px; line-height: 1.5; }
+    .error { color: #cf3434; }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
   </style>
 </head>
+
 <body>
-<div class="wrap">
-  <div class="hero">
-    <div class="eyebrow">Telegram Mini App</div>
-    <h1>Absensi Digital</h1>
-    <p>Catat kehadiran dengan mudah dan transparan.</p>
-    <div class="pill">● <span id="connection">Menghubungkan...</span></div>
-  </div>
+<div class="app">
+  <section class="hero">
+    <div>APLIKASI PRESENSI DIGITAL</div>
+    <h1 id="greeting">Selamat datang!</h1>
+    <p>Catat kehadiran dan pantau riwayat presensi Anda.</p>
+  </section>
 
-  <div id="message" class="notice hidden" role="status"></div>
-  <div id="loading" class="loading">Memverifikasi akun Telegram...</div>
-  <button id="retryBtn" class="btn secondary hidden" onclick="this.classList.add('hidden');refreshApp()">Coba lagi</button>
-  <div id="app" class="hidden">
-    <div class="grid">
-      <section class="card">
-        <div class="muted">Profil Telegram</div>
-        <div class="name" id="displayName">—</div>
-        <div class="muted" id="username">—</div>
-        <div class="muted small" id="telegramId"></div>
-      </section>
-
-      <section class="card">
-        <div class="section-title">Sesi absensi</div>
-        <div id="sessionTitle" class="name">Belum ada sesi</div>
-        <div id="sessionMeta" class="muted">Admin belum membuka absensi.</div>
-        <button id="checkinBtn" class="btn" onclick="doAttendance('in')" disabled>Absensi Masuk</button>
-        <button id="checkoutBtn" class="btn secondary" onclick="doAttendance('out')" disabled>Absensi Pulang</button>
-      </section>
+  <section class="card">
+    <div class="topline">
+      <h2 style="margin:0">Profil Saya</h2>
+      <span class="muted" id="dateLabel">-</span>
     </div>
+    <p class="muted">Nama</p>
+    <div class="value" id="profileName">Memuat...</div>
+    <p class="muted">Telegram ID</p>
+    <div id="profileId">-</div>
+    <p class="muted">Peran</p>
+    <div id="profileRole">-</div>
+  </section>
 
-    <section id="adminPanel" class="card hidden">
-      <div class="row">
-        <div class="section-title">Dashboard Admin</div>
-        <span class="tag">ADMIN</span>
-      </div>
-      <div class="stats">
-        <div class="stat"><strong id="statUsers">0</strong><span>Pengguna</span></div>
-        <div class="stat"><strong id="statAttendance">0</strong><span>Total absensi</span></div>
-        <div class="stat"><strong id="statCurrent">0</strong><span>Hadir sesi ini</span></div>
-      </div>
-      <div style="margin-top:16px">
-        <label for="sessionInput" class="muted">Nama kegiatan / sesi</label>
-        <input id="sessionInput" maxlength="120" placeholder="Contoh: Absensi Kuliah Pagi">
-        <button class="btn" onclick="createSession()">Buka Sesi Absensi</button>
-        <button class="btn secondary" onclick="closeSession()">Tutup Sesi Absensi</button>
-        <button class="btn secondary" onclick="loadDashboard()">Muat Ulang Dashboard</button>
-      </div>
-      <div class="section-title" style="margin-top:20px">Absensi sesi ini</div>
-      <div id="adminSessionInfo" class="muted small" style="margin:-6px 0 8px"></div>
-      <div id="adminRecords" class="muted">Belum ada data.</div>
-    </section>
+  <section class="card">
+    <h2>Presensi Hari Ini</h2>
+    <p class="muted">Status pencatatan kehadiran Anda.</p>
+    <div class="record">
+      <span class="muted">Check-in</span>
+      <div class="value" id="checkInTime">Belum check-in</div>
+    </div>
+    <div class="record">
+      <span class="muted">Check-out</span>
+      <div class="value" id="checkOutTime">Belum check-out</div>
+    </div>
+    <p>Status: <strong id="todayStatus">Belum ada presensi</strong></p>
 
-    <section class="card">
-      <div class="row">
-        <div class="section-title">Riwayat saya</div>
-        <button class="btn secondary" style="width:auto;margin:0;padding:7px 10px;font-size:12px" onclick="refreshApp()">Muat ulang</button>
-      </div>
-      <div id="myRecords" class="muted">Belum ada riwayat absensi.</div>
-    </section>
-  </div>
-  <footer>Absensi Digital · Waktu server mengikuti Asia/Jakarta</footer>
+    <label for="note">Catatan check-in (opsional)</label>
+    <textarea id="note" rows="2" maxlength="300"
+      placeholder="Contoh: hadir di kantor"></textarea>
+
+    <button id="checkInBtn" onclick="checkIn()">Check-in</button>
+    <button id="checkOutBtn" onclick="checkOut()">Check-out</button>
+    <button class="secondary" onclick="refresh()">Muat Ulang Data</button>
+    <div id="message" class="notice" role="status"></div>
+  </section>
+
+  <section class="card">
+    <h2>Riwayat Presensi</h2>
+    <div id="history"><p class="muted">Memuat riwayat...</p></div>
+  </section>
+
+  <section class="card">
+    <button class="secondary" onclick="closeApp()">Tutup Aplikasi</button>
+    <p class="muted">Data kehadiran diproses oleh sistem presensi.</p>
+  </section>
 </div>
 
 <script>
-  // WAJIB: tempel URL Web App Apps Script yang berakhiran /exec.
-  // Frontend ini di-host di GitHub Pages/Netlify, bukan di script.google.com.
-  const API_URL = 'https://script.google.com/macros/s/AKfycbwC48asHSv6KA-jmMSB3RV_ctOZc-3SrycQF7AVKO7WNEHNUB66Zf0vBwC_CTQUfbdnYg/exec';
-
-const tg = window.Telegram?.WebApp;
-console.log('Telegram WebApp tersedia:', !!tg);
-console.log('initData tersedia:', !!(tg?.initData));
-console.log('Panjang initData:', tg?.initData?.length || 0);
-
-if (tg) {
-  tg.ready();
-  tg.expand();
-}
-
-  function showMessage(text, type) {
-    const el = document.getElementById('message');
-    el.textContent = text;
-    el.className = 'notice ' + (type || '');
-    el.classList.remove('hidden');
-  }
-  function hideMessage() {
-    document.getElementById('message').classList.add('hidden');
-  }
-  function setBusy(value) {
-    busy = value;
-    ['checkinBtn','checkoutBtn'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.disabled = value || !state || !state.activeSession;
-    });
-  }
-
-function callServer(fn, args, onSuccess, onError) {
-  const fail = message => {
-    setBusy(false);
-    showMessage(
-      message || 'Terjadi kesalahan. Coba lagi.',
-      'error'
-    );
-    if (onError) onError(message);
-  };
-
-  const tg = window.Telegram?.WebApp;
-  const initData = tg?.initData || '';
+  const tg = window.Telegram && window.Telegram.WebApp;
+  let initData = '';
+  let busy = false;
 
   if (tg) {
     tg.ready();
     tg.expand();
+    initData = tg.initData || '';
+  }
+
+  document.getElementById('checkInBtn').disabled = true;
+  document.getElementById('checkOutBtn').disabled = true;
+
+  function showMessage(message, isError) {
+    const el = document.getElementById('message');
+    el.textContent = message;
+    el.className = 'notice' + (isError ? ' error' : '');
+  }
+
+  function setBusy(value) {
+    busy = value;
+    document.getElementById('checkInBtn').disabled = value;
+    document.getElementById('checkOutBtn').disabled = value;
+  }
+
+  function callServer(method, args, success) {
+    if (!initData) {
+      showMessage(
+        'Buka aplikasi ini melalui Telegram agar dapat login.',
+        true
+      );
+      return;
+    }
+
+    setBusy(true);
+    showMessage('Memproses permintaan...', false);
+
+    const runner = google.script.run
+      .withSuccessHandler(function(result) {
+        setBusy(false);
+        success(result);
+      })
+      .withFailureHandler(function(error) {
+        setBusy(false);
+        showMessage(
+          error && error.message
+            ? error.message
+            : 'Terjadi kesalahan. Coba lagi.',
+          true
+        );
+      });
+
+    runner[method].apply(runner, [initData].concat(args || []));
+  }
+
+  function login() {
+    callServer('loginTelegram', [], function(result) {
+      document.getElementById('greeting').textContent =
+        'Halo, ' + result.profile.name + '!';
+      document.getElementById('profileName').textContent =
+        result.profile.name;
+      document.getElementById('profileId').textContent =
+        result.profile.id;
+      document.getElementById('profileRole').textContent =
+        result.profile.role;
+      document.getElementById('dateLabel').textContent =
+        result.date;
+
+      refresh();
+    });
+  }
+
+  function refresh() {
+    callServer('getMyAttendance', [], function(result) {
+      const item = result.today;
+
+      document.getElementById('checkInTime').textContent =
+        item && item.checkIn ? item.checkIn : 'Belum check-in';
+
+      document.getElementById('checkOutTime').textContent =
+        item && item.checkOut ? item.checkOut : 'Belum check-out';
+
+      document.getElementById('todayStatus').textContent =
+        item ? item.status : 'Belum ada presensi';
+
+      document.getElementById('checkInBtn').disabled =
+        busy || Boolean(item);
+
+      document.getElementById('checkOutBtn').disabled =
+        busy || !item || Boolean(item.checkOut);
+
+      renderHistory(result.history || []);
+      showMessage('Data berhasil diperbarui.', false);
+    });
+  }
+
+  function checkIn() {
+    const note = document.getElementById('note').value.trim();
+    callServer('checkIn', [note], function(result) {
+      document.getElementById('note').value = '';
+      showMessage('Check-in berhasil dicatat.', false);
+      refresh();
+    });
+  }
+
+  function checkOut() {
+    callServer('checkOut', [], function(result) {
+      showMessage('Check-out berhasil dicatat.', false);
+      refresh();
+    });
+  }
+
+  function renderHistory(items) {
+    const root = document.getElementById('history');
+    root.replaceChildren();
+
+    if (!items.length) {
+      const empty = document.createElement('p');
+      empty.className = 'muted';
+      empty.textContent = 'Belum ada riwayat presensi.';
+      root.appendChild(empty);
+      return;
+    }
+
+    items.forEach(item => {
+      const record = document.createElement('div');
+      record.className = 'record';
+
+      const title = document.createElement('strong');
+      title.textContent = item.date;
+
+      const times = document.createElement('p');
+      times.className = 'muted';
+      times.textContent =
+        'Masuk: ' + (item.checkIn || '-') +
+        ' · Pulang: ' + (item.checkOut || '-');
+
+      const status = document.createElement('div');
+      status.className = 'status';
+      status.textContent = item.status;
+
+      record.append(title, times, status);
+      root.appendChild(record);
+    });
+  }
+
+  function closeApp() {
+    if (tg) tg.close();
+    else showMessage('Tombol tutup tersedia di Telegram.', false);
   }
 
   if (!initData) {
-    fail(
-      'Data autentikasi Telegram tidak tersedia. ' +
-      'Buka aplikasi melalui tombol Web App di bot Telegram.'
+    showMessage(
+      'Mode pratinjau. Buka dari Telegram untuk menggunakan presensi.',
+      true
     );
-    return;
+  } else {
+    login();
   }
-
-  if (!API_URL || !API_URL.endsWith('/exec')) {
-    fail('API_URL belum diatur dengan URL Web App Apps Script yang benar.');
-    return;
-  }
-
-  const requestArgs = Array.isArray(args) ? [...args] : [];
-
-  // Semua aksi backend menerima initData sebagai argumen pertama.
-  requestArgs[0] = initData;
-
-  fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'text/plain;charset=utf-8'
-    },
-    body: JSON.stringify({
-      action: fn,
-      args: requestArgs
-    })
-  })
-    .then(async response => {
-      const text = await response.text();
-      let json;
-
-      try {
-        json = JSON.parse(text);
-      } catch (err) {
-        throw new Error(
-          'Respons Apps Script bukan JSON. Periksa URL dan deployment.'
-        );
-      }
-
-      if (!response.ok || json.ok !== true) {
-        throw new Error(
-          json.error || 'Permintaan ke server gagal.'
-        );
-      }
-
-      return json.data;
-    })
-    .then(data => {
-      setBusy(false);
-      if (onSuccess) onSuccess(data);
-    })
-    .catch(err => {
-      fail(err.message || 'Gagal menghubungi server.');
-    });
-}
-
-
-    if (API_URL && API_URL.indexOf('https://script.google.com/macros/s/AKfycbwC48asHSv6KA-jmMSB3RV_ctOZc-3SrycQF7AVKO7WNEHNUB66Zf0vBwC_CTQUfbdnYg/exec') === 0) {
-      fail('Konfigurasi belum selesai: ganti API_URL dengan URL Web App Apps Script yang berakhiran /exec.');
-      return;
-    }
-
-    if (API_URL) {
-      // text/plain menghindari preflight CORS yang tidak didukung Apps Script.
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: fn, args: args })
-      })
-        .then(res => res.json())
-        .then(json => {
-          if (json && json.ok) { if (onSuccess) onSuccess(json.data); }
-          else fail(json && json.error);
-        })
-        .catch(() => fail('Gagal terhubung ke server. Periksa koneksi lalu coba lagi.'));
-      return;
-    }
-
-    fail('API_URL belum dikonfigurasi. Tempel URL Web App Apps Script yang berakhiran /exec, lalu unggah ulang Index.html.');
-  }
-  // Mengambil initData. Di iframe Apps Script, hash URL halaman induk (tempat Telegram
-  // menaruh tgWebAppData) hanya bisa dibaca lewat google.script.url.getLocation().
-  function resolveInitData(cb) {
-    const direct = getInitData();
-    if (direct) { cb(direct); return; }
-    if (typeof google !== 'undefined' && google.script && google.script.url &&
-        google.script.url.getLocation) {
-      google.script.url.getLocation(function (loc) {
-        try {
-          const hash = new URLSearchParams(String((loc && loc.hash) || '').replace(/^#/, ''));
-          cb(hash.get('tgWebAppData') || '');
-        } catch (e) { cb(''); }
-      });
-      return;
-    }
-    cb('');
-  }
-  function getInitData() {
-    if (tg && tg.initData) return tg.initData;
-    // Cadangan: baca dari hash URL bila SDK tidak mengisinya.
-    try {
-      const hash = new URLSearchParams(window.location.hash.slice(1));
-      return hash.get('tgWebAppData') || '';
-    } catch (e) { return ''; }
-  }
-  function start() {
-    if (!tg) {
-      document.getElementById('loading').textContent =
-        'Aplikasi ini harus dibuka melalui tombol Mini App di Telegram.';
-      document.getElementById('connection').textContent = 'Buka dari Telegram';
-      return;
-    }
-    tg.ready();
-    tg.expand();
-    resolveInitData(function (value) {
-    initData = value;
-    if (!initData) {
-      document.getElementById('loading').textContent =
-        API_URL
-          ? 'Data autentikasi tidak tersedia. Buka ulang melalui bot Telegram.'
-          : 'Data autentikasi tidak tersedia. Halaman ini tidak bisa dibuka langsung dari browser. Buka lewat bot Telegram (tombol Mini App / menu bot).';
-      document.getElementById('connection').textContent = 'Belum terverifikasi';
-      return;
-    }
-    document.getElementById('connection').textContent = 'Telegram terhubung';
-    refreshApp();
-    });
-  }
-  function refreshApp() {
-    hideMessage();
-    document.getElementById('loading').classList.remove('hidden');
-    document.getElementById('app').classList.add('hidden');
-    callServer('getBootstrap', [initData], onSuccess, onError);
-      state = data;
-      document.getElementById('loading').classList.add('hidden');
-      document.getElementById('app').classList.remove('hidden');
-      document.getElementById('displayName').textContent = data.user.displayName || 'Pengguna Telegram';
-      document.getElementById('username').textContent = data.user.username ? '@' + data.user.username : 'Username tidak tersedia';
-      document.getElementById('telegramId').textContent = 'ID: ' + data.user.telegramId;
-      renderSession(data.activeSession);
-      renderMyRecords(data.myRecords || []);
-      document.getElementById('adminPanel').classList.toggle('hidden', !data.isAdmin);
-      if (data.isAdmin) loadDashboard();
-    }, () => {
-      document.getElementById('loading').textContent = 'Gagal memuat data. Tekan tombol di bawah untuk mencoba lagi.';
-      const retry = document.getElementById('retryBtn');
-      if (retry) retry.classList.remove('hidden');
-    });
-  }
-  function renderSession(session) {
-    const title = document.getElementById('sessionTitle');
-    const meta = document.getElementById('sessionMeta');
-    const inBtn = document.getElementById('checkinBtn');
-    const outBtn = document.getElementById('checkoutBtn');
-    if (!session) {
-      title.textContent = 'Belum ada sesi';
-      meta.textContent = 'Admin belum membuka absensi.';
-      inBtn.disabled = true;
-      outBtn.disabled = true;
-      return;
-    }
-    title.textContent = session.title;
-    meta.textContent = 'Tanggal: ' + session.sessionDate + ' · Status: terbuka';
-    inBtn.disabled = false;
-    outBtn.disabled = false;
-  }
-  function renderMyRecords(records) {
-    const el = document.getElementById('myRecords');
-    if (!records.length) { el.textContent = 'Belum ada riwayat absensi.'; return; }
-    el.innerHTML = '';
-    records.forEach(r => {
-      const item = document.createElement('div');
-      item.className = 'record';
-      const top = document.createElement('div');
-      top.className = 'row';
-      const label = document.createElement('strong');
-      label.textContent = r.sessionTitle || r.displayName || 'Absensi';
-      const tag = document.createElement('span');
-      tag.className = 'tag';
-      tag.textContent = r.status || 'HADIR';
-      top.append(label, tag);
-      const time = document.createElement('div');
-      time.className = 'muted small';
-      time.textContent = 'Masuk: ' + (r.checkInAt || '—') + ' · Pulang: ' + (r.checkOutAt || '—');
-      item.append(top, time);
-      el.appendChild(item);
-    });
-  }
-  function doAttendance(direction) {
-    if (busy) return;
-    setBusy(true);
-    hideMessage();
-    const fn = direction === 'in' ? 'checkIn' : 'checkOut';
-    callServer(fn, [initData], result => {
-      setBusy(false);
-      showMessage(result.message || 'Berhasil.', 'success');
-      refreshApp();
-    });
-  }
-  function createSession() {
-    const title = document.getElementById('sessionInput').value.trim();
-    if (!title) { showMessage('Isi nama kegiatan terlebih dahulu.', 'error'); return; }
-    callServer('adminCreateSession', [initData, title], result => {
-      showMessage(result.message, 'success');
-      document.getElementById('sessionInput').value = '';
-      refreshApp();
-    });
-  }
-  function closeSession() {
-    if (!confirm('Tutup sesi absensi yang sedang aktif?')) return;
-    callServer('adminCloseSession', [initData], result => {
-      showMessage(result.message, 'success');
-      refreshApp();
-    });
-  }
-  function loadDashboard() {
-    if (!state || !state.isAdmin) return;
-    callServer('adminGetDashboard', [initData], data => {
-      document.getElementById('statUsers').textContent = data.totalUsers;
-      document.getElementById('statAttendance').textContent = data.totalAttendance;
-      document.getElementById('statCurrent').textContent = data.currentSessionCount;
-      const vs = data.viewSession;
-      document.getElementById('adminSessionInfo').textContent = vs
-        ? vs.title + ' · ' + vs.sessionDate + (vs.isOpen ? ' · terbuka' : ' · sudah ditutup')
-        : 'Belum ada sesi.';
-      const list = document.getElementById('adminRecords');
-      list.innerHTML = '';
-      if (!data.latest.length) { list.textContent = 'Belum ada data absensi.'; return; }
-      data.latest.forEach(r => {
-        const item = document.createElement('div');
-        item.className = 'record';
-        const title = document.createElement('strong');
-        title.textContent = r.displayName + (r.username ? ' (@' + r.username + ')' : '');
-        const time = document.createElement('div');
-        time.className = 'muted small';
-        time.textContent = 'Masuk: ' + (r.checkInAt || '—') + ' · Pulang: ' + (r.checkOutAt || '—');
-        item.append(title, time);
-        list.appendChild(item);
-      });
-    });
-  }
-  start();
 </script>
 </body>
 </html>
